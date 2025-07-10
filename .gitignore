@@ -1,9 +1,22 @@
-
-/frontend/build/
+# Ignorar dependências
 /frontend/node_modules/
+node_modules/
 
+# Ignorar arquivos de build (produção)
 frontend/build/
-frontend/node_modules/
+build/
+
+# Ignorar arquivos Python (caso use scripts no frontend)
 __pycache__/
 *.pyc
+
+# Ignorar variáveis de ambiente
+frontend/.env
+/frontend/.env
 .env
+
+# Ignorar certificados SSL (caso existam no frontend)
+frontend/ssl/
+ssl/
+*.pem
+*.key

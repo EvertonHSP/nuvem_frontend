@@ -1,22 +1,30 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import AccountMenu from './AccountMenu';
+import './style/Layout.css'; 
 
 const Layout = () => {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   return (
-    <div>
+    <div className="app-container">
       <nav className="navbar">
-        <div>
-          <Link to="/">Home</Link>
+        <div className="nav-left">
+          <Link to="/" className="nav-link">Home</Link>
+        </div>
+        <div className="nav-right">
           {!user ? (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <Link to="/login" className="nav-link">Login</Link>
+              <Link to="/register" className="nav-link">Register</Link>
             </>
           ) : (
-            <button onClick={logout}>Logout</button>
+            <>
+              {location.pathname === '/' && <AccountMenu />}
+              <button onClick={logout} className="logout-button">Logout</button>
+            </>
           )}
         </div>
       </nav>

@@ -1,21 +1,618 @@
-
-/* Estilos para os ícones */
-.file-icon {
-  margin-right: 8px;
-  min-width: 20px; /* Mantém o alinhamento consistente */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
-/* Cores por tipo de arquivo */
-.file-icon.folder { color: #FFA000; }
-.file-icon.image { color: #4CAF50; }
-.file-icon.video { color: #F44336; }
-.file-icon.pdf { color: #E53935; }
-.file-icon.document { color: #1976D2; }
-.file-icon.spreadsheet { color: #388E3C; }
-.file-icon.presentation { color: #AB47BC; }
-.file-icon.archive { color: #795548; }
+.breadcrumb-item {
+  cursor: pointer;
+  color: #4285F4;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
 
-/* Modal Styles */
+.breadcrumb-item:hover {
+  background-color: #f1f3f4;
+}
+
+.breadcrumb-item.current {
+  color: #5f6368;
+  cursor: default;
+}
+
+.breadcrumb-item.current:hover {
+  background-color: transparent;
+}
+
+.breadcrumb-separator {
+  margin: 0 4px;
+  color: #5f6368;
+}
+
+
+.drive-logo {
+  height: 50px; /* Ajuste conforme necessário */
+  width: auto;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+
+.file-owner-info {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.owner-email {
+  font-style: italic;
+}
+/* ===== ESTILOS PARA INFORMAÇÕES DE COMPARTILHAMENTO ===== */
+.folder-sharing-info {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  max-width: calc(100% - 16px);
+}
+
+/* Estilo para "Compartilhada" - VERDE */
+.folder-sharing-info .sharing-badge[data-status="shared"] {
+  background-color: #e8f5e9; /* Verde claro */
+  color: #388e3c; /* Verde escuro */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Estilo para "Herdada" - AZUL */
+.folder-sharing-info .sharing-badge[data-status="inherited"] {
+  background-color: #e3f2fd; /* Azul claro */
+  color: #1976d2; /* Azul escuro */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sharing-detail {
+  font-size: 10px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+
+
+/* ===== ESTILOS GERAIS (MAIOR PRIORIDADE) ===== */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: 60px;
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.drive-container {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 95vw;          /* 100% da largura da tela */
+  margin: 0;             /* remove margens externas */
+  padding: 0;            /* remove espaçamento interno, se necessário */
+  background-color: #f5f5f5;
+  margin: 0 auto; 
+}
+
+.drive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem; /* Reduzi o padding vertical */
+  height: 60px; /* Altura fixa */
+  min-height: 60px; /* Garante altura mínima */
+  background-color: white;
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box; /* Importante para incluir padding na altura total */
+  position: relative; /* Necessário para z-index funcionar */
+  z-index: 10;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-email {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.drive-content {
+  flex: 1;
+   padding: 0 2rem 2rem 2rem; 
+  overflow-y: auto;
+}
+
+.actions-container {
+  position: relative;
+}
+
+.upload-btn {
+  background-color: #4285f4;
+  color: white; /* Mantido branco pois o botão é azul (#4285f4) */
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.upload-btn:hover {
+  background-color: #3367d6; /* Azul mais escuro no hover */
+  transform: translateY(-2px); /* Efeito sutil de levantar */
+}
+
+.upload-btn:disabled {
+  background-color: #cccccc;
+  color: #666666; /* Texto cinza escuro quando desabilitado */
+  cursor: not-allowed;
+  transform: translateY(0); /* Efeito sutil de levantar */
+}
+
+.upload-menu {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Sombra mais forte */
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  z-index: 100;
+  border: 1px solid #e0e0e0; /* Borda sutil */
+}
+
+.upload-menu button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: #333333; /* Texto escuro para contraste */
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.upload-menu button:hover {
+  background-color: #f5f5f5; /* Cinza mais claro no hover */
+  color: #000000; /* Texto mais escuro no hover */
+}
+
+/* Barra de ações */
+/* Barra de ações FIXA no topo */
+.file-action-bar {
+  position: fixed; /* Mudamos de sticky para fixed */
+  top: 60px; /* Coloca logo abaixo do header (60px de altura) */
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center; /* Centraliza os botões */
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-100%); /* Esconde inicialmente */
+  transition: transform 0.3s ease;
+  margin: 0 auto;
+  width: fit-content;
+  max-width: 90%;
+}
+
+.file-action-bar.visible {
+  transform: translateY(0); /* Mostra quando visível */
+}
+.file-action-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 99;
+  display: none;
+  pointer-events: none;
+}
+
+.file-action-bar.visible + .file-action-bar-overlay {
+  /*display: block;*/
+  pointer-events: auto;
+}
+
+.file-action-bar button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  color: #333; /* Cor do texto escura para contraste */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15)
+}
+
+.file-action-bar button:hover {
+  background: #e9e9e9; /* Cor mais escura no hover */
+  transform: translateY(-2px); /* Efeito sutil de levantar */
+}
+
+.file-action-bar button:active {
+  transform: translateY(0); /* Remove o efeito quando clicado */
+}
+
+.file-action-bar button.danger {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.file-action-bar button.danger:hover {
+  background: #fde8e8; /* Fundo vermelho claro no hover */
+}
+
+/* Estilo para ícones dentro dos botões */
+.file-action-bar button svg {
+  margin-right: 5px; /* Espaço entre ícone e texto (se houver) */
+}
+
+/* ===== LISTAGEM DE ARQUIVOS ===== */
+.file-section {
+  margin-bottom: 2rem !important;
+}
+
+.files-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 2rem !important;
+  margin-top: 1rem !important;
+  width: 100% !important; /* Adicione isso */
+}
+
+.file-item {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 1rem 0.5rem !important;
+  background: white !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+  aspect-ratio: 1/1 !important;
+  /* Remova max-width: 160px !important; */
+  width: 100% !important; /* Adicione isso */
+  /* Remova margin: 0 auto !important; */
+}
+
+/* Mantenha o restante do seu CSS como está */
+
+/* Conteúdo interno ajustado */
+.file-item {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+
+.file-item-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+  padding: 0.5rem 0 !important;
+}
+
+.file-item:hover {
+  background-color: #dad8de !important;
+  transform: translateY(-4px) !important;
+}
+
+.file-item.selected {
+  background-color: #e3f2fd !important;
+  transform: translateY(0) !important;
+}
+
+
+/* Estilo para pastas - substitua o .file-item.folder existente */
+.file-item.folder {
+  background-color: #fff8e1;
+}
+
+/* Estilo para pastas selecionadas - NOVO */
+.file-item.folder.selected {
+  background-color: #e3f2fd !important; /* Mesma cor dos arquivos selecionados */
+  box-shadow: 0 0 0 2px #90caf9; /* Adiciona um destaque visual */
+}
+
+/* Estilo hover para pastas - substitua o existente */
+.file-item.folder:hover {
+  background-color: #fce9ab;
+  transform: translateY(-4px);
+}
+
+/* Mantenha o hover para pastas selecionadas */
+.file-item.folder.selected:hover {
+  background-color: #d5b23e !important;
+  transform: translateY(0);
+}
+
+.file-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 0.25rem 0 !important;
+  color: #555 !important;
+  flex-grow: 1 !important; /* Ocupa espaço disponível */
+}
+
+.file-icon svg {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+}
+
+.file-icon.folder svg {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.file-icon.folder { color: #FFA000 !important; }
+.file-icon.image { color: #4CAF50 !important; }
+.file-icon.video { color: #F44336 !important; }
+.file-icon.pdf { color: #E53935 !important; }
+.file-icon.document { color: #1976D2 !important; }
+.file-icon.spreadsheet { color: #388E3C !important; }
+.file-icon.presentation { color: #AB47BC !important; }
+.file-icon.archive { color: #795548 !important; }
+
+.file-name {
+  margin: 0.25rem 0 0.5rem !important;
+  padding: 0 0.25rem !important;
+  text-align: center !important;
+  font-size: 0.85rem !important; /* Reduzido um pouco */
+  font-weight: 500 !important;
+  color: #333 !important;
+  width: 100% !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-height: 2.6em !important; /* Ajustado */
+  line-height: 1.3 !important;
+  word-break: break-word !important;
+}
+
+.public-badge {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 8px !important;
+  background: #4caf50 !important;
+  color: white !important;
+  padding: 2px 6px !important; /* Reduzido */
+  border-radius: 10px !important;
+  font-size: 0.6rem !important; /* Reduzido */
+  font-weight: 500 !important;
+  z-index: 2 !important;
+}
+
+.public-badge.private {
+  background: #9e9e9e !important;
+}
+
+.empty-folder {
+  text-align: center !important;
+  color: #666 !important;
+  margin-top: 2rem !important;
+}
+
+
+/* ===== MODAL DE PREVIEW ===== */
+.preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.preview-modal .wide-modal {
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+}
+
+.preview-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 10px 10px 0 0;
+}
+
+.preview-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.preview-body {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-image {
+  max-height: 90%;
+  max-width: 90%;
+  object-fit: contain;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.preview-pdf {
+  width: 100%;
+  height: 100%;
+  zoom: 1.1;
+  border: none;
+}
+
+.preview-video {
+  max-height: 90%;
+  max-width: 90%;
+  background: #000;
+  border-radius: 5px;
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 70vh;
+  border: none;
+  background: #fff;
+}
+
+.unsupported-file {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+}
+
+.unsupported-message {
+  max-width: 500px;
+}
+
+.unsupported-icon {
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.preview-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.download-btn {
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.download-btn:hover {
+  background: #3367d6;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+  padding: 5px;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* ===== MODAL DE CRIAÇÃO DE PASTA ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -63,7 +660,9 @@
   gap: 10px;
 }
 
-.modal-actions button {
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -71,128 +670,271 @@
   font-size: 14px;
 }
 
-.modal-actions .cancel-btn {
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.modal-actions .confirm-btn {
+.confirm-btn {
   background-color: #4285f4;
   color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.modal-actions .confirm-btn:disabled {
+.confirm-btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-
-
-
-
-
-.drive-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f5f5f5;
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .preview-modal .wide-modal {
+    width: 95%;
+    height: 95vh;
+  }
+  
+  .preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .preview-header h3 {
+    max-width: 100%;
+  }
+  
+  .file-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+/* Modal de Compartilhamento - Estilo Modular */
+.share-modal {
+  max-width: 500px;
+  width: 90%;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  animation: modalFadeIn 0.3s ease-out;
 }
 
-.drive-header {
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.share-modal h3 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.75rem;
+}
+
+/* Seção de Usuários Compartilhados */
+.shared-users-container {
+  margin-bottom: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.shared-users-title {
+  font-size: 1rem;
+  color: #34495e;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shared-users-title svg {
+  color: #7f8c8d;
+}
+
+.shared-users-list {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #bdc3c7 #f1f1f1;
+}
+
+.shared-users-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.shared-users-list::-webkit-scrollbar-thumb {
+  background-color: #bdc3c7;
+  border-radius: 3px;
+}
+
+.shared-user-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 0.75rem;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.user-email {
-  color: #666;
+.shared-user-email {
   font-size: 0.9rem;
+  color: #2c3e50;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.actions-container {
-  position: relative;
-}
-
-.upload-btn {
-  background-color: #4285f4;
+/* Botão Remover */
+.unshare-btn {
+  background: #e74c3c;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
   cursor: pointer;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.25rem;
 }
 
-.upload-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.unshare-btn:hover {
+  background: #c0392b;
 }
 
-.upload-menu {
-  position: absolute;
-  right: 0;
-  top: 50px;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Seção de Novo Compartilhamento */
+.new-share-section {
+  margin-top: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.new-share-title {
+  font-size: 1rem;
+  color: #34495e;
+  margin-bottom: 1rem;
+}
+
+.email-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  transition: border 0.2s;
+}
+
+.email-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+}
+
+/* Seção de Permissões */
+.permissions-section {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.permission-item {
   display: flex;
-  flex-direction: column;
-  min-width: 150px;
-  z-index: 100;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
-.upload-menu button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: none;
-  text-align: left;
+.permission-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.75rem;
+  accent-color: #3498db;
   cursor: pointer;
 }
 
-.upload-menu button:hover {
-  background-color: #f1f1f1;
+.permission-label {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  cursor: pointer;
 }
 
-.upload-menu button:disabled {
-  color: #999;
+/* Botão Compartilhar */
+.share-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.share-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-btn:hover {
+  background: #2980b9;
+}
+
+.share-btn:disabled {
+  background: #bdc3c7;
   cursor: not-allowed;
 }
 
-.drive-content {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
+.close-modal-btn {
+  background: #95a5a6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.empty-message {
-  text-align: center;
-  color: #666;
-  margin-top: 2rem;
+.close-modal-btn:hover {
+  background: #7f8c8d;
 }
 
-.spinner {
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  border-top: 2px solid white;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
+/* Responsividade */
+@media (max-width: 600px) {
+  .share-modal {
+    padding: 1.5rem;
+  }
+  
+  .share-actions {
+    flex-direction: column;
+  }
+  
+  .share-btn, .close-modal-btn {
+    width: 100%;
+  }
 }
-
+/* ===== ANIMAÇÕES ===== */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
